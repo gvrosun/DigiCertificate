@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'user/styles/base.css' %}">
+</head>
+<body>
+    <h1>Hello index!</h1>
+    <ul>
+        {% for data in user_data %}
+            <li>{{ data.username }}</li>
+            <img src="{{ data.profile_pic.url }}" alt="{{ data.username }}" width="100px" height="100px">
+        {% endfor %}
+    </ul>
+</body>
+</html>
