@@ -1,1 +1,0 @@
-web: gunicorn DigiCertificate.wsgi
