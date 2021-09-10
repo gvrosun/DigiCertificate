@@ -1,18 +1,21 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired,Email,EqualTo
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms.validators import DataRequired, Email, EqualTo
 from wtforms import ValidationError
+from digicert.models import User
 
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
+    remember_me = BooleanField()
     submit = SubmitField('Log In')
 
 
 class RegistrationForm(FlaskForm):
+    first_name = StringField('First Name', validators=[DataRequired()])
+    last_name = StringField('Last Name', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired(), EqualTo('pass_confirm', message='Passwords Must Match!')])
     pass_confirm = PasswordField('Confirm password', validators=[DataRequired()])
     submit = SubmitField('Register!')
@@ -26,3 +29,14 @@ class RegistrationForm(FlaskForm):
         # Check if not None for that username!
         if User.query.filter_by(username=field.data).first():
             raise ValidationError('Sorry, that username is taken!')
+
+
+class ForgotPassword(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Reset Password')
+
+    def check_email(self, field):
+        if User.query.filter_by(email=field.data).first():
+            pass
+        else:
+            raise ValidationError('Your email not registered with us')
