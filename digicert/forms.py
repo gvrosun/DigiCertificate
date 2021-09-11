@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
-from wtforms.fields.html5 import EmailField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, FileField, SelectField
+from wtforms.fields.html5 import EmailField, DateField
 from wtforms.validators import DataRequired, EqualTo
 from wtforms import ValidationError
 from digicert.models import User
@@ -49,3 +49,25 @@ class ContactUsForm(FlaskForm):
     subject = StringField('Subject', validators=[DataRequired()])
     message = TextAreaField('Message', validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+
+class SubscribeForm(FlaskForm):
+    email = EmailField(validators=[DataRequired()])
+    submit = SubmitField('Subscribe')
+
+
+class AddEventForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
+    logo = FileField('Logo', validators=[DataRequired()])
+    mode = SelectField('Category', choices=[('Online', 'Offline'), ('online', 'offline')], validators=[DataRequired()])
+    event_date = DateField('Event Date', validators=[DataRequired()])
+    submit = SubmitField('Add Event')
+
+
+class AddCertificateForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
+    certificate_image = FileField('Certificate', validators=[DataRequired()])
+    obtained_date = DateField('Obtained Date', validators=[DataRequired()])
+    submit = SubmitField('Add Certificate')

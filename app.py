@@ -2,15 +2,20 @@ from digicert import app, db
 from flask import render_template, redirect, request, url_for, flash
 from flask_login import login_user, login_required, logout_user
 from digicert.models import User
-from digicert.forms import LoginForm, RegistrationForm, ForgotPasswordForm, ContactUsForm
+from digicert.forms import LoginForm, RegistrationForm, ForgotPasswordForm, \
+    ContactUsForm, SubscribeForm, AddEventForm, \
+    AddCertificateForm
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    form = ContactUsForm()
-    if form.validate_on_submit():
+    contact_form = ContactUsForm()
+    subscribe_form = SubscribeForm()
+    if contact_form.validate_on_submit():
         pass
-    return render_template('index.html', form=form)
+    if subscribe_form.validate_on_submit():
+        pass
+    return render_template('index.html', contact_form=contact_form, subscribe_form=subscribe_form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -18,7 +23,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user.check_password(form.password.data) and user is not None:
+        if user is not None and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
             flash('Logged in successfully.')
             next_page = request.args.get('next')
@@ -83,6 +88,24 @@ def events(event_type):
 @app.route('/certificates')
 def certificates():
     return render_template('certificates.html')
+
+
+@login_required
+@app.route('/add_certificate')
+def add_certificate():
+    form = AddCertificateForm()
+    if form.validate_on_submit():
+        pass
+    return render_template('add_certificate.html', form=form)
+
+
+@login_required
+@app.route('/add_event')
+def add_event():
+    form = AddEventForm()
+    if form.validate_on_submit():
+        pass
+    return render_template('add_event.html', form=form)
 
 
 if __name__ == '__main__':
