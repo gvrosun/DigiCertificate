@@ -70,5 +70,17 @@ def not_found(e):
     return render_template("404.html"), 404
 
 
+# All events
+@app.route('/events/<event_type>')
+def events(event_type):
+    return render_template('events.html', type=event_type.capitalize())
+
+
+@login_required
+@app.route('/certificates')
+def certificates():
+    return render_template('certificates.html')
+
+
 if __name__ == '__main__':
     app.run()
