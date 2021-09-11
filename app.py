@@ -2,12 +2,15 @@ from digicert import app, db
 from flask import render_template, redirect, request, url_for, flash
 from flask_login import login_user, login_required, logout_user
 from digicert.models import User
-from digicert.forms import LoginForm, RegistrationForm, ForgotPassword
+from digicert.forms import LoginForm, RegistrationForm, ForgotPasswordForm, ContactUsForm
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    form = ContactUsForm()
+    if form.validate_on_submit():
+        pass
+    return render_template('index.html', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -53,9 +56,9 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/forgot_password')
+@app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
-    form = ForgotPassword()
+    form = ForgotPasswordForm()
     if form.validate_on_submit():
         if form.check_email(form.email):
             email = form.email.data

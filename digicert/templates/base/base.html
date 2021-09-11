@@ -10,26 +10,27 @@
     <meta name="author" content="">
 
     {% block title %}<title>DigiCertificate</title>{% endblock %}
-    <link rel="shortcut icon" type="image/png" href="../../static/favicon/favicon.ico"/>
+    <link rel="shortcut icon" href="../../static/favicon/favicon.ico">
+    <link rel="apple-touch-icon" href="../../static/favicon/favicon-32x32.png">
 
     <!-- Custom fonts for this template-->
     <link href="../../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="../../static/css/sb-admin-2.min.css" rel="stylesheet">
+    {% block css %}
+    {% endblock %}
 
 </head>
 
-<body id="page-top">
+<body id="page-top" class="sidebar-toggled">
 
     <!-- Page Wrapper -->
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url_for('index') }}">
@@ -402,16 +403,6 @@
             </div>
             <!-- End of Main Content -->
 
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; DigiCert Website 2021</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-
         </div>
         <!-- End of Content Wrapper -->
 
@@ -452,6 +443,8 @@
 
     <!-- Custom scripts for all pages-->
     <script src="../../static/js/sb-admin-2.min.js"></script>
+    {% block js %}
+    {% endblock %}
 
 </body>
 </html>

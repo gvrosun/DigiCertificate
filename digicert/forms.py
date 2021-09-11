@@ -1,12 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Email, EqualTo
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
+from wtforms.fields.html5 import EmailField
+from wtforms.validators import DataRequired, EqualTo
 from wtforms import ValidationError
 from digicert.models import User
 
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = EmailField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField()
     submit = SubmitField('Log In')
@@ -15,7 +16,7 @@ class LoginForm(FlaskForm):
 class RegistrationForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = EmailField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired(), EqualTo('pass_confirm', message='Passwords Must Match!')])
     pass_confirm = PasswordField('Confirm password', validators=[DataRequired()])
     submit = SubmitField('Register!')
@@ -31,8 +32,8 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Sorry, that username is taken!')
 
 
-class ForgotPassword(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
+class ForgotPasswordForm(FlaskForm):
+    email = EmailField('Email', validators=[DataRequired()])
     submit = SubmitField('Reset Password')
 
     def check_email(self, field):
@@ -40,3 +41,11 @@ class ForgotPassword(FlaskForm):
             pass
         else:
             raise ValidationError('Your email not registered with us')
+
+
+class ContactUsForm(FlaskForm):
+    name = StringField('Your Name', validators=[DataRequired()])
+    email = EmailField('Your Email', validators=[DataRequired()])
+    subject = StringField('Subject', validators=[DataRequired()])
+    message = TextAreaField('Message', validators=[DataRequired()])
+    submit = SubmitField('Submit')
