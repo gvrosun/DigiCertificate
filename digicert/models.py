@@ -41,18 +41,20 @@ class Event(db.Model):
     slug = db.Column(db.String(64), index=True)
     description = db.Column(db.Text)
     logo = db.Column(db.Text)
+    logo_mimetype = db.Column(db.Text)
     mode = db.Column(db.String(32))
     created_date = db.Column(db.Date)
     ending_date = db.Column(db.Date)
 
-    def __init__(self, title, description, logo, mode, ending_date):
+    def __init__(self, title, description, logo, logo_mimetype, mode, ending_date):
         self.title = title
         self.slug = '-'.join(title.split())
         self.description = description
         self.logo = logo
+        self.logo_mimetype = logo_mimetype
         self.mode = mode
         self.created_date = datetime.utcnow().date()
-        self.ending_date = datetime.strptime(ending_date, '%d.%m.%y')
+        self.ending_date = ending_date
 
 
 class Certificate(db.Model):
@@ -64,12 +66,14 @@ class Certificate(db.Model):
     obtained_date = db.Column(db.Date)
     description = db.Column(db.Text)
     cert_img = db.Column(db.Text)
+    cert_img_mimetype = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    def __init__(self, title, obtained_date, description, cert_img, user_id):
+    def __init__(self, title, obtained_date, description, cert_img, cert_img_mimetype, user_id):
         self.title = title
-        self.slug = '-'.join(title.split())
-        self.obtained_date = datetime.strptime(obtained_date, '%d.%m.%y')
+        self.slug = ('-'.join(title.split()) + '-' + str(user_id)).lower()
+        self.obtained_date = obtained_date
         self.description = description
         self.cert_img = cert_img
+        self.cert_img_mimetype = cert_img_mimetype
         self.user_id = user_id

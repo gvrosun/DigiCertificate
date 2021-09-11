@@ -1,9 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, FileField, SelectField
+from flask_wtf.file import FileField, FileRequired
+from wtforms import StringField, PasswordField, SubmitField, \
+    BooleanField, TextAreaField, \
+    SelectField
 from wtforms.fields.html5 import EmailField, DateField
 from wtforms.validators import DataRequired, EqualTo
 from wtforms import ValidationError
 from digicert.models import User
+from datetime import date
 
 
 class LoginForm(FlaskForm):
@@ -17,7 +21,10 @@ class RegistrationForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name', validators=[DataRequired()])
     email = EmailField('Email', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired(), EqualTo('pass_confirm', message='Passwords Must Match!')])
+    password = PasswordField('Password', validators=[
+        DataRequired(),
+        EqualTo('pass_confirm', message='Passwords Must Match!')
+    ])
     pass_confirm = PasswordField('Confirm password', validators=[DataRequired()])
     submit = SubmitField('Register!')
 
@@ -60,14 +67,19 @@ class AddEventForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
     logo = FileField('Logo', validators=[DataRequired()])
-    mode = SelectField('Category', choices=[('Online', 'Offline'), ('online', 'offline')], validators=[DataRequired()])
-    event_date = DateField('Event Date', validators=[DataRequired()])
+    mode = SelectField('Category', choices=[('online', 'Online'), ('offline', 'Offline')], validators=[DataRequired()])
+    event_date = DateField('Event Date', validators=[DataRequired()], default=date.today())
     submit = SubmitField('Add Event')
 
 
 class AddCertificateForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
-    certificate_image = FileField('Certificate', validators=[DataRequired()])
-    obtained_date = DateField('Obtained Date', validators=[DataRequired()])
+    certificate_image = FileField('Certificate', validators=[FileRequired()])
+    obtained_date = DateField('Obtained Date', validators=[DataRequired()], default=date.today())
     submit = SubmitField('Add Certificate')
+
+
+class SearchForm(FlaskForm):
+    search_team = StringField(validators=[DataRequired()])
+    submit = SubmitField('Search')

@@ -1,10 +1,12 @@
 from digicert import app, db
-from flask import render_template, redirect, request, url_for, flash
-from flask_login import login_user, login_required, logout_user
-from digicert.models import User
+from werkzeug.utils import secure_filename
+from flask import render_template, redirect, request, url_for, flash, Response
+from flask_login import login_user, login_required, logout_user, current_user
+from digicert.models import User, Certificate, Event
+from datetime import date, timedelta
 from digicert.forms import LoginForm, RegistrationForm, ForgotPasswordForm, \
     ContactUsForm, SubscribeForm, AddEventForm, \
-    AddCertificateForm
+    AddCertificateForm, SearchForm
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -75,6 +77,7 @@ def forgot_password():
 
 @app.errorhandler(404)
 def not_found(e):
+    print(e)
     return render_template("404.html"), 404
 
 
@@ -87,25 +90,97 @@ def events(event_type):
 @login_required
 @app.route('/certificates')
 def certificates():
-    return render_template('certificates.html')
+    all_certificates = Certificate.query.filter_by(user_id=current_user.id).all()
+    total_cert = len(all_certificates)
+    total_this_year = 0
+    this_year = date.today().year
+    for cert in all_certificates:
+        if cert.obtained_date.year == this_year:
+            total_this_year += 1
+    return render_template('certificates.html',
+                           certificates=all_certificates,
+                           total_cert=total_cert,
+                           total_this_year=total_this_year,
+                           this_year=this_year
+                           )
 
 
 @login_required
-@app.route('/add_certificate')
+@app.route('/add_certificate', methods=['GET', 'POST'])
 def add_certificate():
     form = AddCertificateForm()
     if form.validate_on_submit():
-        pass
-    return render_template('add_certificate.html', form=form)
+        title = form.title.data
+        description = form.description.data
+        obtained_date = form.obtained_date.data
+        cert_image = form.certificate_image.data
+
+        filename = secure_filename(cert_image.filename)
+        mimetype = cert_image.mimetype
+        if not filename or not mimetype:
+            return 'Bad upload!', 400
+
+        new_cert = Certificate(title=title,
+                               description=description,
+                               obtained_date=obtained_date,
+                               cert_img=cert_image.read(),
+                               cert_img_mimetype=mimetype,
+                               user_id=current_user.id
+                               )
+        db.session.add(new_cert)
+        db.session.commit()
+        flash('Certificate Uploaded')
+        return redirect(url_for('index'))
+
+    return render_template('add_certificate.html',
+                           form=form,
+                           today_date=date.today(),
+                           start_date=date.today() - timedelta(days=36500)
+                           )
 
 
 @login_required
-@app.route('/add_event')
+@app.route('/add_event', methods=['GET', 'POST'])
 def add_event():
     form = AddEventForm()
     if form.validate_on_submit():
-        pass
-    return render_template('add_event.html', form=form)
+        title = form.title.data
+        description = form.description.data
+        event_date = form.event_date.data
+        logo = form.logo.data
+        mode = form.mode.data
+
+        filename = secure_filename(logo.filename)
+        mimetype = logo.mimetype
+        if not filename or not mimetype:
+            return 'Bad upload!', 400
+
+        new_cert = Event(title=title,
+                         description=description,
+                         ending_date=event_date,
+                         logo=logo,
+                         logo_mimetype=mimetype,
+                         mode=mode
+                         )
+        db.session.add(new_cert)
+        db.session.commit()
+        flash('Event Added')
+        return redirect(url_for('index'))
+
+    return render_template('add_event.html',
+                           form=form,
+                           total_data=date.today(),
+                           max_date=date.today() + timedelta(days=365)
+                           )
+
+
+@app.route('/certificates/preview/<string:slug>')
+def view_certificate(slug):
+    cert = Certificate.query.filter_by(slug=slug).first()
+    if not cert:
+        return 'Img Not Found!', 404
+
+    return Response(cert.cert_img, mimetype=cert.cert_img_mimetype)
 
 
 if __name__ == '__main__':
