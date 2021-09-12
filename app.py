@@ -223,5 +223,11 @@ def view_certificate(slug):
     return Response(cert.cert_img, mimetype=cert.cert_img_mimetype)
 
 
+@app.route('/show_image/<int:event_id>')
+def show_event_image(event_id):
+    img = Event.query.filter_by(id=event_id).first()
+    return Response(img.logo, mimetype=img.logo_mimetype)
+
+
 if __name__ == '__main__':
     app.run()
