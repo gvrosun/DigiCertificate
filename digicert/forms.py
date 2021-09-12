@@ -68,7 +68,8 @@ class AddEventForm(FlaskForm):
     description = TextAreaField('Description', validators=[DataRequired()])
     logo = FileField('Logo', validators=[DataRequired()])
     mode = SelectField('Category', choices=[('online', 'Online'), ('offline', 'Offline')], validators=[DataRequired()])
-    event_date = DateField('Event Date', validators=[DataRequired()], default=date.today())
+    start_date = DateField('Start Date', validators=[DataRequired()], default=date.today())
+    end_date = DateField('Event Date', validators=[DataRequired()], default=date.today())
     submit = SubmitField('Add Event')
 
 

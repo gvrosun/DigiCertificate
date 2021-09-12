@@ -1,6 +1,6 @@
 {% extends 'base/base.html' %}
 
-{% block title %}<title>Certificates</title>{% endblock %}
+{% block title %}<title>{{ cert_type }} Certificates</title>{% endblock %}
 
 {% block content %}
 
@@ -10,7 +10,7 @@
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        <h1 class="h3 mb-0 text-gray-800">{{ cert_type }} Certificates</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                 class="fas fa-download fa-sm text-white-50"></i> Download all certificates</a>
     </div>
@@ -56,27 +56,16 @@
 
         <!-- Earnings (Monthly) Card Example -->
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
+            <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Progress compared with others
-                            </div>
-                            <div class="row no-gutters align-items-center">
-                                <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">100%</div>
-                                </div>
-                                <div class="col">
-                                    <div class="progress progress-sm mr-2">
-                                        <div class="progress-bar bg-info" role="progressbar"
-                                            style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-                                            aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Total uploaded certificates</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_uploaded }}</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -90,8 +79,8 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Pending Results</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                Total official certificates</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_official }}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -131,6 +120,8 @@
                 </div>
             </div>
         {% endfor %}
+    {% else %}
+        <h1>No Certificates found</h1>
     {% endif %}
     </div>
 </div>
