@@ -113,6 +113,7 @@ def certificates(cert_type):
     uploaded = Certificate.query.filter_by(user_id=current_user.id, cert_type=cert_type).all()
     official = Certificate.query.filter_by(user_id=current_user.id, cert_type=cert_type).all()
     all_cert = Certificate.query.filter_by(user_id=current_user.id).all()
+    print(uploaded, official, all_cert)
     if cert_type == 'uploaded':
         all_certificates = uploaded
     elif cert_type == 'official':
@@ -128,6 +129,7 @@ def certificates(cert_type):
     for cert in all_cert:
         if cert.obtained_date.year == this_year:
             total_this_year += 1
+
     return render_template('certificates.html',
                            certificates=all_certificates,
                            cert_type=cert_type.capitalize(),

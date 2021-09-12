@@ -79,5 +79,5 @@ class Certificate(db.Model):
         self.description = description
         self.cert_img = cert_img
         self.cert_img_mimetype = cert_img_mimetype
-        self.type = cert_type
+        self.cert_type = cert_type
         self.user_id = user_id
