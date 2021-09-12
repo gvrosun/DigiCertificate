@@ -107,8 +107,8 @@ def events(event_type):
                            )
 
 
-@login_required
 @app.route('/certificates/<string:cert_type>')
+@login_required
 def certificates(cert_type):
     uploaded = Certificate.query.filter_by(user_id=current_user.id, cert_type=cert_type).all()
     official = Certificate.query.filter_by(user_id=current_user.id, cert_type=cert_type).all()
@@ -139,8 +139,8 @@ def certificates(cert_type):
                            )
 
 
-@login_required
 @app.route('/add_certificate', methods=['GET', 'POST'])
+@login_required
 def add_certificate():
     form = AddCertificateForm()
     if form.validate_on_submit():
@@ -174,8 +174,8 @@ def add_certificate():
                            )
 
 
-@login_required
 @app.route('/add_event', methods=['GET', 'POST'])
+@login_required
 def add_event():
     form = AddEventForm()
     if form.validate_on_submit():
@@ -212,6 +212,7 @@ def add_event():
 
 
 @app.route('/certificates/preview/<string:slug>')
+@login_required
 def view_certificate(slug):
     cert = Certificate.query.filter_by(slug=slug, user_id=current_user.id).first()
     if not cert:
