@@ -120,7 +120,7 @@ def certificates(cert_type):
     else:
         return 'Bad Request', 404
 
-    total_cert = Certificate.query.count()
+    total_cert = len(all_cert)
     total_uploaded = len(uploaded)
     total_official = len(official)
     this_year = date.today().year
