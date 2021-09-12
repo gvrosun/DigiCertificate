@@ -85,7 +85,7 @@ def not_found(e):
 @app.route('/events/<event_type>')
 def events(event_type):
     total_events = Event.query.count()
-    live_events = Event.query.filter(Event.end_date >= date.today(), Event.start_date < date.today()).all()
+    live_events = Event.query.filter(Event.end_date >= date.today(), Event.start_date <= date.today()).all()
     upcoming_events = Event.query.filter(Event.start_date > date.today()).all()
     ended_events = Event.query.filter(Event.end_date < date.today()).all()
     if event_type == 'live':
@@ -110,8 +110,8 @@ def events(event_type):
 @app.route('/certificates/<string:cert_type>')
 @login_required
 def certificates(cert_type):
-    uploaded = Certificate.query.filter_by(user_id=current_user.id, cert_type=cert_type).all()
-    official = Certificate.query.filter_by(user_id=current_user.id, cert_type=cert_type).all()
+    uploaded = Certificate.query.filter_by(user_id=current_user.id, cert_type='uploaded').all()
+    official = Certificate.query.filter_by(user_id=current_user.id, cert_type='official').all()
     all_cert = Certificate.query.filter_by(user_id=current_user.id).all()
     print(uploaded, official, all_cert)
     if cert_type == 'uploaded':
