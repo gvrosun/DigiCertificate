@@ -10,15 +10,18 @@ def load_user(user_id):
 
 
 class User(db.Model, UserMixin):
-    # Create a table in the db
-    __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(64))
-    last_name = db.Column(db.String(64))
-    email = db.Column(db.String(64), unique=True, index=True)
-    username = db.Column(db.String(64), unique=True, index=True)
-    password_hash = db.Column(db.String(128))
+    first_name = db.Column(db.String(64), nullable=False)
+    last_name = db.Column(db.String(64), nullable=False)
+    email = db.Column(db.String(64), unique=True, index=True, nullable=False)
+    username = db.Column(db.String(64), unique=True, index=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+    registered_on = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    confirmed = db.Column(db.Boolean, nullable=False, default=False)
+    confirmed_on = db.Column(db.DateTime, nullable=True)
+    admin = db.Column(db.Boolean, nullable=False, default=False)
+    profile_pic = db.Column(db.Text, nullable=True)
     certificates = db.relationship("Certificate")
 
     def __init__(self, first_name, last_name, email, username, password):
@@ -33,8 +36,6 @@ class User(db.Model, UserMixin):
 
 
 class Event(db.Model):
-
-    __tablename__ = 'event'
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(64))
@@ -60,7 +61,6 @@ class Event(db.Model):
 
 
 class Certificate(db.Model):
-    __tablename__ = 'certificate'
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(64))

@@ -1,12 +1,16 @@
-from digicert import app, db
-from werkzeug.utils import secure_filename
-from flask import render_template, redirect, request, url_for, flash, Response
+from datetime import date, timedelta, datetime
+
+from flask import render_template, redirect, request, url_for, flash, Response, session
 from flask_login import login_user, login_required, logout_user, current_user
-from digicert.models import User, Certificate, Event
-from datetime import date, timedelta
+from werkzeug.utils import secure_filename
+
+from digicert import app, db
 from digicert.forms import LoginForm, RegistrationForm, ForgotPasswordForm, \
     ContactUsForm, SubscribeForm, AddEventForm, \
-    AddCertificateForm, SearchForm
+    AddCertificateForm
+from digicert.models import User, Certificate, Event
+from confirm_token import generate_confirmation_token, confirm_token
+from send_mail import send_mail
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -42,6 +46,11 @@ def register():
 
     if form.validate_on_submit():
         username = str(form.email.data).split('@')[0]
+        check_exist = User.query.filter_by(email=form.email.data).first()
+        if check_exist:
+            flash('User already exist', 'danger')
+            return redirect(url_for('login'))
+
         user = User(email=form.email.data,
                     first_name=form.first_name.data,
                     last_name=form.last_name.data,
@@ -50,9 +59,44 @@ def register():
 
         db.session.add(user)
         db.session.commit()
-        flash('Thanks for registering! Now you can login!')
-        return redirect(url_for('login'))
+        token = generate_confirmation_token(email=form.email.data)
+        session['token'] = token
+        session['check'] = True
+        return redirect(url_for('confirm_email_view',
+                                name=form.first_name.data,
+                                email=form.email.data))
+
     return render_template('register.html', form=form)
+
+
+@app.route('/verify/<token>')
+@login_required
+def confirm_email(token):
+    email = None
+    try:
+        email = confirm_token(token)
+    except Exception as e:
+        flash('The confirmation link is invalid or expired.', 'danger')
+
+    user = User.query.filter_by(email=email).first_or_404()
+    if user.confirmed:
+        flash('Account already confirmed', 'success')
+    else:
+        user.confirmed = True
+        user.confirmed_on = datetime.now()
+        db.session.add(user)
+        db.session.commit()
+        flash('Account confirmed')
+    return redirect(url_for('index'))
+
+
+@app.route('/confirm_email')
+def confirm_email_view():
+    token = session['token']
+    name = request.args['name']
+    email = request.args['email']
+    send_mail(name, email, token)
+    return render_template('confirm_email.html')
 
 
 @app.route('/logout')
@@ -203,7 +247,6 @@ def add_event():
                          )
         db.session.add(new_cert)
         db.session.commit()
-        flash('Event Added')
         return redirect(url_for('index'))
 
     return render_template('add_event.html',
@@ -227,6 +270,12 @@ def view_certificate(slug):
 def show_event_image(event_id):
     img = Event.query.filter_by(id=event_id).first()
     return Response(img.logo, mimetype=img.logo_mimetype)
+
+
+@app.route('/resend_confirm_mail')
+def resend_confirm_mail():
+
+    return render_template('confirm_email.html')
 
 
 if __name__ == '__main__':

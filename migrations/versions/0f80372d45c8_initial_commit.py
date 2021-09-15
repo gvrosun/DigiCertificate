@@ -1,8 +1,8 @@
 """Initial commit
 
-Revision ID: 716c5ecc5f6e
+Revision ID: 0f80372d45c8
 Revises: 
-Create Date: 2021-09-12 13:49:26.202295
+Create Date: 2021-09-14 11:14:13.265484
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '716c5ecc5f6e'
+revision = '0f80372d45c8'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -34,11 +34,15 @@ def upgrade():
     op.create_index(op.f('ix_event_slug'), 'event', ['slug'], unique=False)
     op.create_table('user',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('first_name', sa.String(length=64), nullable=True),
-    sa.Column('last_name', sa.String(length=64), nullable=True),
-    sa.Column('email', sa.String(length=64), nullable=True),
-    sa.Column('username', sa.String(length=64), nullable=True),
-    sa.Column('password_hash', sa.String(length=128), nullable=True),
+    sa.Column('first_name', sa.String(length=64), nullable=False),
+    sa.Column('last_name', sa.String(length=64), nullable=False),
+    sa.Column('email', sa.String(length=64), nullable=False),
+    sa.Column('username', sa.String(length=64), nullable=False),
+    sa.Column('password_hash', sa.String(length=128), nullable=False),
+    sa.Column('registered_on', sa.DateTime(), nullable=False),
+    sa.Column('confirmed', sa.Boolean(), nullable=False),
+    sa.Column('confirmed_on', sa.DateTime(), nullable=True),
+    sa.Column('admin', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_user_email'), 'user', ['email'], unique=True)
@@ -51,6 +55,7 @@ def upgrade():
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('cert_img', sa.Text(), nullable=True),
     sa.Column('cert_img_mimetype', sa.Text(), nullable=True),
+    sa.Column('cert_type', sa.String(length=16), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
