@@ -96,7 +96,7 @@ def confirm_email_view():
     name = request.args['name']
     email = request.args['email']
     send_mail(name, email, token)
-    return render_template('confirm_email.html')
+    return render_template('confirm_email.html', email=email, name=name)
 
 
 @app.route('/logout')

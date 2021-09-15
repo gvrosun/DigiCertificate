@@ -3,7 +3,7 @@ from flask_mail import Message
 
 
 def send_mail(name, email, token):
-    msg = Message(f'Confirm Account - DigiCertificate', sender='no-reply@digicert.com', recipients=[email])
+    msg = Message(f'Confirm Account - DigiCertificate', sender=('DigiCertificate', 'no-reply@digicert.com'), recipients=[email])
     msg.html = """
     <!DOCTYPE html>
     <html>
@@ -11,7 +11,6 @@ def send_mail(name, email, token):
 
       <meta charset="utf-8">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
-      <title>Email Confirmation</title>
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <style type="text/css">
       /**
