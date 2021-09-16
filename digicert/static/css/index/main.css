@@ -24,15 +24,6 @@ h1, h2, h3, h4, h5, h6, .font-primary {
 }
 
 /*--------------------------------------------------------------
-# Disable aos animation delay on mobile devices
---------------------------------------------------------------*/
-@media screen and (max-width: 768px) {
-  [data-aos-delay] {
-    transition-delay: 0 !important;
-  }
-}
-
-/*--------------------------------------------------------------
 # Hero Section
 --------------------------------------------------------------*/
 #hero {
@@ -552,7 +543,7 @@ section {
 .faq .faq-list a {
   display: block;
   position: relative;
-  font-family: #eb5d1e;
+  font-family: #e75a1c;
   font-size: 18px;
   font-weight: 600;
   color: #eb5d1e;
