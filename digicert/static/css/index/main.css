@@ -24,78 +24,12 @@ h1, h2, h3, h4, h5, h6, .font-primary {
 }
 
 /*--------------------------------------------------------------
-# Back to top button
---------------------------------------------------------------*/
-.back-to-top {
-  position: fixed;
-  display: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 3px;
-  right: 15px;
-  bottom: 15px;
-  background: #eb5d1e;
-  color: #fff;
-  transition: display 0.5s ease-in-out;
-  z-index: 99999;
-}
-
-.back-to-top i {
-  font-size: 24px;
-  position: absolute;
-  top: 8px;
-  left: 8px;
-}
-
-.back-to-top:hover {
-  color: #fff;
-  background: #ee7843;
-  transition: background 0.2s ease-in-out;
-}
-
-/*--------------------------------------------------------------
 # Disable aos animation delay on mobile devices
 --------------------------------------------------------------*/
 @media screen and (max-width: 768px) {
   [data-aos-delay] {
     transition-delay: 0 !important;
   }
-}
-
-/*--------------------------------------------------------------
-# Header
---------------------------------------------------------------*/
-#header {
-  height: 72px;
-  transition: all 0.5s;
-  z-index: 997;
-  padding: 15px 0;
-  background: #fff;
-  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
-}
-
-#header .logo h1 {
-  font-size: 30px;
-  margin: 0;
-  padding: 6px 0;
-  line-height: 1;
-  font-weight: 400;
-  letter-spacing: 2px;
-}
-
-#header .logo h1 a, #header .logo h1 a:hover {
-  color: #7a6960;
-  text-decoration: none;
-}
-
-#header .logo img {
-  padding: 0;
-  margin: 0;
-  max-height: 40px;
-}
-
-#main {
-  margin-top: 72px;
 }
 
 /*--------------------------------------------------------------
