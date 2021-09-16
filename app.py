@@ -103,6 +103,7 @@ def confirm_email_view():
     except Exception as e:
         flash('Something went wrong! Please try again later', 'error')
         User.query.filter_by(email=email).delete()
+        redirect(url_for('index'))
 
     return render_template('confirm_email.html', email=email, name=name)
 
