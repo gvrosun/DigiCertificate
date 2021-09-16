@@ -39,7 +39,7 @@ class Event(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(64))
-    slug = db.Column(db.String(64), index=True)
+    slug = db.Column(db.String(64), index=True, unique=True)
     description = db.Column(db.Text)
     logo = db.Column(db.Text)
     logo_mimetype = db.Column(db.Text)
@@ -50,7 +50,7 @@ class Event(db.Model):
 
     def __init__(self, title, description, logo, logo_mimetype, mode, end_date, start_date):
         self.title = title
-        self.slug = ('-'.join(title.split())).lower()
+        self.slug = ('-'.join(title.split())).lower() + '-' + datetime.now().strftime('%m-%d-%Y-%H-%M-%S')
         self.description = description
         self.logo = logo
         self.logo_mimetype = logo_mimetype
@@ -64,7 +64,7 @@ class Certificate(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(64))
-    slug = db.Column(db.String(32), index=True)
+    slug = db.Column(db.String(32), index=True, unique=True)
     obtained_date = db.Column(db.Date)
     description = db.Column(db.Text)
     cert_img = db.Column(db.Text)
@@ -74,7 +74,7 @@ class Certificate(db.Model):
 
     def __init__(self, title, obtained_date, description, cert_img, cert_img_mimetype, cert_type, user_id):
         self.title = title
-        self.slug = ('-'.join(title.split()) + '-' + str(user_id)).lower()
+        self.slug = ('-'.join(title.split())).lower() + '-' + datetime.now().strftime('%m-%d-%Y-%H-%M-%S')
         self.obtained_date = obtained_date
         self.description = description
         self.cert_img = cert_img

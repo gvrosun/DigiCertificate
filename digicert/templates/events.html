@@ -101,7 +101,7 @@
                                 src="{{ url_for('show_event_image', event_id=event.id) }}" alt="{{ event.title }}">
                         </div>
                         <p>{{ event.description[:100] }}... <br> ({{ event.start_date }} - {{ event.end_date }})</p>
-                        <a href="#" class="btn btn-secondary btn-icon-split">
+                        <a href="{{ url_for('event_details', slug=event.slug) }}" class="btn btn-secondary btn-icon-split">
                             <span class="icon text-white-50">
                                 <i class="fas fa-arrow-right"></i>
                             </span>

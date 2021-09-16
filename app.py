@@ -265,6 +265,12 @@ def add_event():
                            )
 
 
+@app.route('/events/details/<string:slug>')
+def event_details(slug):
+    details = Event.query.filter_by(slug=slug).first()
+    return render_template('event_details.html', details=details)
+
+
 @app.route('/certificates/preview/<string:slug>')
 @login_required
 def view_certificate(slug):

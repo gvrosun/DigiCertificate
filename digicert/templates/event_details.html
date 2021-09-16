@@ -1,0 +1,13 @@
+{% extends 'base/base.html' %}
+
+{% block title %}<title>{{ details.title }}</title>{% endblock %}
+
+{% block content %}
+    {{ details.title }}<br>
+    {{ details.description }}<br>
+    {{ details.start_date }}<br>
+    {{ details.end_date }}
+{% endblock %}
+
+{% block form_errors %}
+{% endblock %}
