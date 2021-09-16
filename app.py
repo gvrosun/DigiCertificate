@@ -31,12 +31,14 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user is not None and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            flash('Logged in successfully.')
+            flash('Logged in successfully.', 'success')
             next_page = request.args.get('next')
             if next_page is None or not next_page[0] == '/':
                 next_page = url_for('index')
 
             return redirect(next_page)
+        else:
+            flash('Invalid username / password', 'error')
     return render_template('login.html', form=form)
 
 
@@ -48,7 +50,7 @@ def register():
         username = str(form.email.data).split('@')[0]
         check_exist = User.query.filter_by(email=form.email.data).first()
         if check_exist:
-            flash('User already exist', 'danger')
+            flash('User already exist', 'error')
             return redirect(url_for('login'))
 
         user = User(email=form.email.data,
@@ -76,17 +78,17 @@ def confirm_email(token):
     try:
         email = confirm_token(token)
     except Exception as e:
-        flash('The confirmation link is invalid or expired.', 'danger')
+        flash('The confirmation link is invalid or expired.', 'error')
 
     user = User.query.filter_by(email=email).first_or_404()
     if user.confirmed:
-        flash('Account already confirmed', 'success')
+        flash('Account already confirmed', 'warning')
     else:
         user.confirmed = True
         user.confirmed_on = datetime.now()
         db.session.add(user)
         db.session.commit()
-        flash('Account confirmed')
+        flash('Account confirmed', 'success')
     return redirect(url_for('index'))
 
 
@@ -95,7 +97,13 @@ def confirm_email_view():
     token = session['token']
     name = request.args['name']
     email = request.args['email']
-    send_mail(name, email, token)
+    try:
+        send_mail(name, email, token)
+        flash('Mail send successfully', 'success')
+    except Exception as e:
+        flash('Something went wrong! Please try again later', 'error')
+        User.query.filter_by(email=email).delete()
+
     return render_template('confirm_email.html', email=email, name=name)
 
 
@@ -103,7 +111,7 @@ def confirm_email_view():
 @login_required
 def logout():
     logout_user()
-    flash('You logged out!')
+    flash('You logged out!', 'success')
     return redirect(url_for('index'))
 
 
@@ -113,7 +121,6 @@ def forgot_password():
     if form.validate_on_submit():
         if form.check_email(form.email):
             email = form.email.data
-            print(email)
             redirect(url_for('index'))
 
     return render_template('forgot-password.html', form=form)
@@ -210,8 +217,8 @@ def add_certificate():
                                )
         db.session.add(new_cert)
         db.session.commit()
-        flash('Certificate Uploaded')
-        return redirect(url_for('index'))
+        flash('Certificate Uploaded', 'success')
+        return redirect(url_for('certificates', cert_type='uploaded'))
 
     return render_template('add_certificate.html',
                            form=form,
@@ -247,7 +254,8 @@ def add_event():
                          )
         db.session.add(new_cert)
         db.session.commit()
-        return redirect(url_for('index'))
+        flash('New event added', 'success')
+        return redirect(url_for('events', event_type='upcoming'))
 
     return render_template('add_event.html',
                            form=form,
@@ -274,7 +282,6 @@ def show_event_image(event_id):
 
 @app.route('/resend_confirm_mail')
 def resend_confirm_mail():
-
     return render_template('confirm_email.html')
 
 

@@ -385,6 +385,18 @@
 
 {% endblock %}
 
+{% block form_errors %}
+    <script>
+        {% for field in subscribe_form.errors %}
+            toastr.error('{{ subscribe_form[field].errors[0] }}');
+        {% endfor %}
+        {% for field in contact_form.errors %}
+            toastr.error('{{ contact_form[field].errors[0] }}');
+        {% endfor %}
+    </script>
+{% endblock %}
+
+
 {% block js %}
     <!-- Vendor JS Files -->
     <script src="../static/vendor/index/php-email-form/validate.js"></script>

@@ -72,7 +72,6 @@ h1, h2, h3, h4, h5, h6, .font-primary {
   height: 72px;
   transition: all 0.5s;
   z-index: 997;
-  transition: all 0.5s;
   padding: 15px 0;
   background: #fff;
   box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
@@ -185,7 +184,7 @@ h1, h2, h3, h4, h5, h6, .font-primary {
 
 .nav-menu .drop-down > a:after {
   content: "\ea99";
-  font-family: IcoFont;
+  font-family: IcoFont, serif;
   padding-left: 5px;
 }
 
@@ -206,7 +205,7 @@ h1, h2, h3, h4, h5, h6, .font-primary {
 
 .nav-menu .drop-down .drop-down > a:after {
   content: "\eaa0";
-  font-family: IcoFont;
+  font-family: IcoFont, serif;
   position: absolute;
   right: 15px;
 }
@@ -272,7 +271,7 @@ h1, h2, h3, h4, h5, h6, .font-primary {
 
 .mobile-nav .drop-down > a:after {
   content: "\ea99";
-  font-family: IcoFont;
+  font-family: IcoFont, serif;
   padding-left: 10px;
   position: absolute;
   right: 15px;
@@ -636,14 +635,13 @@ section {
 
 .portfolio #portfolio-flters li {
   cursor: pointer;
-  margin: 0 15px 15px 0;
   display: inline-block;
   padding: 5px;
   font-size: 16px;
   font-weight: 600;
   line-height: 20px;
   color: #212529;
-  margin-bottom: 5px;
+  margin: 0 15px 5px 0;
   transition: all 0.3s ease-in-out;
 }
 
@@ -1210,11 +1208,9 @@ section {
 # Footer
 --------------------------------------------------------------*/
 #footer {
-  background: #fff;
   padding: 0 0 30px 0;
   color: #212529;
   font-size: 14px;
-  background: #fef8f5;
 }
 
 #footer .footer-newsletter {

@@ -14,6 +14,7 @@
     <link rel="apple-touch-icon" href="../../static/favicon/favicon-32x32.png">
 
     <!-- Custom fonts for this template-->
+    <link href="../../static/css/toastr.css" rel="stylesheet" type="text/css">
     <link href="../../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
@@ -349,7 +350,11 @@
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ current_user.first_name }} {{ current_user.last_name }}</span>
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ current_user.first_name }} {{ current_user.last_name }}
+                                        {% if not current_user.confirmed %}
+                                            <span style="color: red">(Not Verified)</span>
+                                        {% endif %}
+                                    </span>
                                     <img class="img-profile rounded-circle"
                                         src="../../static/img/undraw_profile.svg" alt="None">
                                 </a>
@@ -455,8 +460,39 @@
 
     <!-- Custom scripts for all pages-->
     <script src="../../static/js/sb-admin-2.min.js"></script>
+
+    <!-- Toastr-->
+    <script src="../../static/js/toastr.js"></script>
+
+    {% block form_errors %}
+    <script>
+        {% for field in form.errors %}
+            toastr.error('{{ form[field].errors[0] }}');
+        {% endfor %}
+    </script>
+    {% endblock %}
+
+    <script>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'success' %}
+                    toastr.success('{{ message }}')
+                {% endif %}
+                {% if category == 'warning' %}
+                    toastr.warning('{{ message }}')
+                {% endif %}
+                {% if category == 'error' %}
+                    toastr.error('{{ message }}')
+                {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+    </script>
+
     {% block js %}
     {% endblock %}
+
 
 </body>
 </html>
