@@ -86,34 +86,25 @@
             </div>
         </div>
     </div>
+
     <!-- Illustrations -->
-    <div class="col-lg-3">
-    {% if events %}
-        {% for event in events %}
-                <!-- Illustrations -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">{{ event.title }}</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="text-center">
-                            <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                                src="{{ url_for('show_event_image', event_id=event.id) }}" alt="{{ event.title }}">
+    <div class="container-fluid mt-4">
+        {% if events %}
+        <div class="row">
+            {% for event in events %}
+                <div class="col">
+                    <div class="card p-3 shadow h-100">
+                        <div class="d-flex flex-row mb-3"><img src="{{ url_for('show_event_image', event_id=event.id) }}" width="70" alt="{{ event.title }}">
+                            <div class="d-flex flex-column ml-2"><span>{{ event.title }}</span><span class="text-black-50">Payment Services</span><span class="ratings"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half"></i></span></div>
                         </div>
-                        <p>{{ event.description[:100] }}... <br> ({{ event.start_date }} - {{ event.end_date }})</p>
-                        <a href="{{ url_for('event_details', slug=event.slug) }}" class="btn btn-secondary btn-icon-split">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-arrow-right"></i>
-                            </span>
-                            <span class="text">More Info</span>
-                        </a>
+                        <h6>{{ event.description[:100] }}...</h6>
+                        <div class="d-flex justify-content-between install mt-3"><span style="color: red">Ends at: {{ event.end_date }}</span><span class="text-primary"><a href="{{ url_for('event_details', slug=event.slug) }}"> View </a>&nbsp;<i class="fa fa-angle-right"></i></span></div>
                     </div>
                 </div>
+            {% endfor %}
             </div>
-        {% endfor %}
-    {% else %}
-        <h1 class="h3 mb-0 text-gray-800">No Events Found</h1>
-    {% endif %}
+        {% endif %}
+    </div>
 </div>
 <!-- /.container-fluid -->
 
