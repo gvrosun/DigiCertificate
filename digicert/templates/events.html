@@ -107,7 +107,7 @@
                             {% else %}
                             <span style="color: darkred">Event Ended</span>
                             {% endif %}
-                        
+
                             <span class="text-primary">
                                 <a href="{{ url_for('event_details', slug=event.slug) }}"> View </a>&nbsp;
                                 <i class="fa fa-angle-right"></i>
@@ -117,6 +117,8 @@
                 </div>
             {% endfor %}
             </div>
+        {% else %}
+            <h1 class="h3 mb-0 text-gray-800">No events Found</h1>
         {% endif %}
     </div>
 </div>

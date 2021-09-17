@@ -90,11 +90,12 @@
             </div>
         </div>
     </div>
-    <!-- Illustrations -->
-    <div class="col-lg-3">
+
+    <!-- Certificates -->
     {% if certificates %}
+    <div class="row">
         {% for certificate in certificates %}
-            <!-- Dropdown Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -119,13 +120,12 @@
                     {{ certificate.description[:100] }}...
                 </div>
             </div>
+        </div>
         {% endfor %}
+    </div>
     {% else %}
         <h1 class="h3 mb-0 text-gray-800">No Certificates Found</h1>
     {% endif %}
-    </div>
-</div>
-<!-- /.container-fluid -->
 
 <!-- End of Main Content -->
 {% endblock %}
